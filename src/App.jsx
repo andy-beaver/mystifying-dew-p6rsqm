@@ -1,16 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import ReactFlow, { MiniMap, Controls, Background } from "reactflow";
 import "reactflow/dist/style.css";
 
 function FinancialFlow() {
-  // For demonstration, let's say we have a checking account balance
-  const checkingBalance = 600; // Example value
-
-  // Evaluate a condition based on the checkingBalance
-  const conditionMet = checkingBalance > 500;
-
-  // Define the nodes
-  const nodes = [
+  const [nodes, setNodes] = useState([
     {
       id: "1",
       type: "input",
@@ -56,10 +49,9 @@ function FinancialFlow() {
         borderRadius: 5,
       },
     },
-  ];
+  ]);
 
-  // Define the edges, including conditional logic on one of them
-  const edges = [
+  const [edges, setEdges] = useState([
     {
       id: "e1-2",
       source: "1",
@@ -75,9 +67,8 @@ function FinancialFlow() {
       target: "3",
       type: "smoothstep",
       animated: true,
-      // Change the label and style based on the condition
-      label: conditionMet ? "If checking > 500 ✓" : "If checking > 500 ✗",
-      style: { stroke: conditionMet ? "green" : "red" },
+      label: "Auto-Save",
+      style: { stroke: "#333" },
     },
     {
       id: "e2-4",
@@ -88,11 +79,18 @@ function FinancialFlow() {
       label: "Investment Contribution",
       style: { stroke: "#333" },
     },
-  ];
+  ]);
 
   return (
     <div style={{ width: "100%", height: "100vh" }}>
-      <ReactFlow nodes={nodes} edges={edges} fitView>
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={setNodes}
+        onEdgesChange={setEdges}
+        fitView
+        nodesDraggable={true} // ensures nodes can be moved freely
+      >
         <Controls />
         <MiniMap />
         <Background variant="dots" gap={12} size={1} />
